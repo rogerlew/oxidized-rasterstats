@@ -1,0 +1,89 @@
+{
+  "copied_files": [
+    "dem/wbt/subcatchments.geojson",
+    "dem/wbt/subcatchments.WGS.geojson",
+    "dem/wbt/channels.geojson",
+    "dem/wbt/channels.WGS.geojson",
+    "dem/wbt/relief.tif",
+    "dem/wbt/fvslop.tif",
+    "dem/wbt/discha.tif",
+    "dem/wbt/floaccum.tif",
+    "dem/wbt/taspec.tif",
+    "landuse/nlcd.tif",
+    "watershed/hillslopes.parquet"
+  ],
+  "geojson_feature_counts": {
+    "dem/wbt/channels.WGS.geojson": 12477,
+    "dem/wbt/channels.geojson": 12477,
+    "dem/wbt/subcatchments.WGS.geojson": 9429,
+    "dem/wbt/subcatchments.geojson": 9429
+  },
+  "points": {
+    "point_count": 9429,
+    "point_source": "subcatchments.geojson(centroid-fallback)"
+  },
+  "rasters": {
+    "dem/wbt/discha.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 11N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Float32",
+      "nodata": -999999.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/large_local/dem/wbt/discha.tif",
+      "size": [
+        1115,
+        1108
+      ]
+    },
+    "dem/wbt/floaccum.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 11N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Float32",
+      "nodata": -32768.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/large_local/dem/wbt/floaccum.tif",
+      "size": [
+        1115,
+        1108
+      ]
+    },
+    "dem/wbt/fvslop.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 11N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Float32",
+      "nodata": -999999.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/large_local/dem/wbt/fvslop.tif",
+      "size": [
+        1115,
+        1108
+      ]
+    },
+    "dem/wbt/relief.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 11N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Float64",
+      "nodata": -999999.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/large_local/dem/wbt/relief.tif",
+      "size": [
+        1115,
+        1108
+      ]
+    },
+    "dem/wbt/taspec.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 11N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Float32",
+      "nodata": -999999.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/large_local/dem/wbt/taspec.tif",
+      "size": [
+        1115,
+        1108
+      ]
+    },
+    "landuse/nlcd.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 11N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Byte",
+      "nodata": 250.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/large_local/landuse/nlcd.tif",
+      "size": [
+        1115,
+        1108
+      ]
+    }
+  },
+  "source_run": "/wc1/runs/co/copacetic-note",
+  "tier": "large_local"
+}

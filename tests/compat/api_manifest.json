@@ -1,0 +1,19 @@
+{
+  "exports": [
+    "__version__",
+    "cli",
+    "gen_point_query",
+    "gen_zonal_stats",
+    "point_query",
+    "raster_stats",
+    "zonal_stats"
+  ],
+  "module": "rasterstats",
+  "signatures": {
+    "gen_point_query": "(vectors, raster, band=1, layer=0, nodata=None, affine=None, interpolate='bilinear', property_name='value', geojson_out=False, boundless=True)",
+    "gen_zonal_stats": "(vectors, raster, layer=0, band=1, nodata=None, affine=None, stats=None, all_touched=False, categorical=False, category_map=None, add_stats=None, zone_func=None, raster_out=False, prefix=None, geojson_out=False, boundless=True, **kwargs)",
+    "point_query": "(*args, **kwargs)",
+    "raster_stats": "(*args, **kwargs)",
+    "zonal_stats": "(*args, **kwargs)"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "copied_files": [
+    "dem/wbt/subcatchments.geojson",
+    "dem/wbt/subcatchments.WGS.geojson",
+    "dem/wbt/channels.geojson",
+    "dem/wbt/channels.WGS.geojson",
+    "dem/wbt/relief.tif",
+    "dem/wbt/fvslop.tif",
+    "dem/wbt/discha.tif",
+    "dem/wbt/floaccum.tif",
+    "dem/wbt/taspec.tif",
+    "landuse/nlcd.tif",
+    "watershed/hillslopes.parquet"
+  ],
+  "geojson_feature_counts": {
+    "dem/wbt/channels.WGS.geojson": 1205,
+    "dem/wbt/channels.geojson": 1205,
+    "dem/wbt/subcatchments.WGS.geojson": 802,
+    "dem/wbt/subcatchments.geojson": 802
+  },
+  "points": {
+    "point_count": 802,
+    "point_source": "subcatchments.geojson(centroid-fallback)"
+  },
+  "rasters": {
+    "dem/wbt/discha.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 13N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Float32",
+      "nodata": -999999.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/small/dem/wbt/discha.tif",
+      "size": [
+        521,
+        529
+      ]
+    },
+    "dem/wbt/floaccum.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 13N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Float32",
+      "nodata": -32768.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/small/dem/wbt/floaccum.tif",
+      "size": [
+        521,
+        529
+      ]
+    },
+    "dem/wbt/fvslop.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 13N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Float32",
+      "nodata": -999999.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/small/dem/wbt/fvslop.tif",
+      "size": [
+        521,
+        529
+      ]
+    },
+    "dem/wbt/relief.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 13N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Float64",
+      "nodata": -999999.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/small/dem/wbt/relief.tif",
+      "size": [
+        521,
+        529
+      ]
+    },
+    "dem/wbt/taspec.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 13N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Float32",
+      "nodata": -999999.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/small/dem/wbt/taspec.tif",
+      "size": [
+        521,
+        529
+      ]
+    },
+    "landuse/nlcd.tif": {
+      "crs": "PROJCRS[\"WGS 84 / UTM zone 13N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIP",
+      "dtype": "Byte",
+      "nodata": 250.0,
+      "path": "/home/workdir/oxidized-rasterstats/tests/fixtures/weppcloud/small/landuse/nlcd.tif",
+      "size": [
+        521,
+        529
+      ]
+    }
+  },
+  "source_run": "/wc1/runs/va/vacant-better",
+  "tier": "small"
+}

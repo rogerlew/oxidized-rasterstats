@@ -1,0 +1,15 @@
+.venv/
+.venv-wheeltest/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+target/
+dist/
+Cargo.lock
+*.so
+*.pyd
+*.dll
+*.dylib
+vendor/upstream_rasterstats/repo/
+tests/fixtures/weppcloud/large_local/
+benchmarks/results/*.json
