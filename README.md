@@ -13,6 +13,14 @@ Rust-accelerated, GDAL-backed implementation of `rasterstats` with drop-in Pytho
 
 ## Quick Start
 
+Install from PyPI:
+
+```bash
+pip install oxidized-rasterstats
+```
+
+Local development setup:
+
 ```bash
 python -m venv .venv
 . .venv/bin/activate
@@ -90,6 +98,8 @@ See `benchmarks/results/2026-02-16.md`.
 `oxidized-rasterstats` is built from and compatible with the upstream
 [`python-rasterstats`](https://github.com/perrygeo/python-rasterstats) project by
 Matthew Perry and contributors.
+
+Upstream project link: <https://github.com/perrygeo/python-rasterstats/>
 
 - Upstream project: `python-rasterstats` (author: Matthew Perry / `perrygeo`)
 - Pinned upstream snapshot: `vendor/upstream_rasterstats/SHA.txt`
