@@ -17,6 +17,12 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Create virtualenv
+        run: |
+          python -m venv .venv
+          echo "VIRTUAL_ENV=$GITHUB_WORKSPACE/.venv" >> "$GITHUB_ENV"
+          echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
+
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
 
