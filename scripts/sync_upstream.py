@@ -59,9 +59,13 @@ def main() -> None:
 
     upstream_src = repo / "src" / "rasterstats"
     upstream_tests = repo / "tests"
+    upstream_license = repo / "LICENSE.txt"
 
     copied_src = copy_tree(upstream_src, vendor_src)
     copied_tests = copy_tree(upstream_tests, vendor_tests)
+    copied_license = False
+    if upstream_license.exists():
+        copied_license = copy_file(upstream_license, vendor_dir / "LICENSE.txt")
 
     # Python compatibility modules.
     py_pkg = ROOT / "python" / "rasterstats"
@@ -94,6 +98,7 @@ def main() -> None:
         "sha": args.sha,
         "copied_source_files": copied_src,
         "copied_test_files": copied_tests,
+        "copied_license_file": copied_license,
     }
     (vendor_dir / "sync_manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"

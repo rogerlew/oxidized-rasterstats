@@ -74,6 +74,26 @@ See `benchmarks/results/2026-02-16.md`.
   - Zonal: Rust `2.655s`, baseline `27.969s` (`10.53x`)
   - Point query: Rust `1.242s`, baseline `21.613s` (`17.41x`)
 
+## Upstream Attribution
+
+`oxidized-rasterstats` is built from and compatible with the upstream
+[`python-rasterstats`](https://github.com/perrygeo/python-rasterstats) project by
+Matthew Perry and contributors.
+
+- Upstream project: `python-rasterstats` (author: Matthew Perry / `perrygeo`)
+- Pinned upstream snapshot: `vendor/upstream_rasterstats/SHA.txt`
+- Vendored upstream source/tests: `vendor/upstream_rasterstats/`
+- Imported parity fixtures/tests: `tests/upstream/`
+- Python compatibility copies based on upstream modules: `python/rasterstats/_upstream_main.py`, `python/rasterstats/_upstream_point.py`, `python/rasterstats/io.py`, `python/rasterstats/utils.py`, `python/rasterstats/cli.py`
+
+See `docs/attribution.md` for attribution and licensing details.
+
+## License
+
+- Project license: BSD 3-Clause (`LICENSE`)
+- Copyright and component-level ownership notes: `NOTICE.md`
+- Upstream `python-rasterstats` license snapshot: `vendor/upstream_rasterstats/LICENSE.txt`
+
 ## Repository Layout
 
 - `python/rasterstats/`: compatibility package + dispatcher + upstream fallback copies
