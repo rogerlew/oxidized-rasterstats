@@ -66,6 +66,14 @@ PYTHONPATH=python pytest tests/perf -q -m perf_small --benchmark-only --benchmar
 PYTHONPATH=python pytest tests/perf -q -m perf_large --benchmark-only --benchmark-min-rounds=5
 ```
 
+## PyPI Release Workflow
+
+- Tag a release commit with `v*` (for example `v0.1.0`) and push the tag.
+- GitHub workflow `.github/workflows/release-wheels.yml` builds:
+  - Linux wheels for CPython 3.9-3.12
+  - source distribution (`sdist`)
+- Publish job uses PyPI Trusted Publishing with `environment: pypi`.
+
 ## Benchmark Snapshot (2026-02-16)
 
 See `benchmarks/results/2026-02-16.md`.

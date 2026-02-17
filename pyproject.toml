@@ -39,7 +39,7 @@ zonalstats = "rasterstats.cli:zonalstats"
 pointquery = "rasterstats.cli:pointquery"
 
 [project.urls]
-Repository = "https://example.invalid/oxidized-rasterstats"
+Repository = "https://github.com/rogerlew/oxidized-rasterstats"
 
 [tool.maturin]
 python-source = "python"
