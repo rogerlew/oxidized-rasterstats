@@ -8,6 +8,7 @@ Rust-accelerated, GDAL-backed implementation of `rasterstats` with drop-in Pytho
 - Build/packaging flow: `maturin`
 - Rust fast paths: zonal stats + point query
 - Python fallback: upstream-compatible behavior preserved
+- Non-overlap `nodata` semantics: matches upstream `python-rasterstats` boundless footprint behavior
 
 ## Quick Start
 

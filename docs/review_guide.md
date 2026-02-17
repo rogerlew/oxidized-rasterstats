@@ -33,8 +33,9 @@ This document summarizes what changed and how to review the codebase efficiently
 2. Rust zonal and point-query dispatch are default-on for eligible calls.
 3. Invalid file-like strings are routed to Python fallback (avoids Rust path open errors for WKT/invalid inputs).
 4. In-memory feature collections are normalized through temporary GeoJSON when Rust dispatch is enabled to preserve cross-input consistency.
-5. Upstream attribution for Matthew Perry and `python-rasterstats` is documented in `docs/attribution.md`.
-6. Project-level copyright and artifact ownership notes are documented in `NOTICE.md`.
+5. Non-overlapping-zone `nodata` footprint counts now match upstream behavior; no post-processing normalization to `0` is applied.
+6. Upstream attribution for Matthew Perry and `python-rasterstats` is documented in `docs/attribution.md`.
+7. Project-level copyright and artifact ownership notes are documented in `NOTICE.md`.
 
 ## Reproduction Commands
 

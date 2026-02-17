@@ -2,14 +2,11 @@ from __future__ import annotations
 
 import math
 import warnings
-from os import PathLike
 
 from affine import Affine
-from shapely.geometry import box, shape
 
 from rasterstats._dispatch import dispatch_zonal_stats
 from rasterstats._fallback_py import fallback_gen_zonal_stats
-from rasterstats.io import read_features
 
 try:
     from tqdm import tqdm
@@ -23,41 +20,6 @@ def _clean_inf(value):
     if isinstance(value, dict):
         return {k: _clean_inf(v) for k, v in value.items()}
     return value
-
-
-def _fix_nodata_nonoverlap(records, vectors, raster, layer):
-    if not isinstance(vectors, (str, PathLike)) or not isinstance(raster, (str, PathLike)):
-        return records
-    if not records:
-        return records
-    if not all(isinstance(item, dict) for item in records):
-        return records
-    if not any("nodata" in item and "count" in item for item in records):
-        return records
-
-    try:
-        import rasterio
-    except Exception:
-        return records
-
-    try:
-        with rasterio.open(raster) as src:
-            raster_bounds = box(*src.bounds)
-        features = list(read_features(vectors, layer=layer))
-    except Exception:
-        return records
-
-    for record, feature in zip(records, features):
-        if "properties" in record:
-            continue
-        nodata = record.get("nodata")
-        count = record.get("count")
-        if count == 0 and isinstance(nodata, (int, float)) and nodata > 0:
-            geom = shape(feature["geometry"])
-            if not geom.intersects(raster_bounds):
-                record["nodata"] = 0
-
-    return records
 
 
 def raster_stats(*args, **kwargs):
@@ -150,12 +112,6 @@ def gen_zonal_stats(
     )
 
     if fast is not None:
-        fast = _fix_nodata_nonoverlap(
-            fast,
-            vectors,
-            raster,
-            layer,
-        )
         for item in fast:
             yield _clean_inf(item)
         return
@@ -180,13 +136,6 @@ def gen_zonal_stats(
             boundless=boundless,
             **kwargs,
         )
-    )
-
-    fallback_records = _fix_nodata_nonoverlap(
-        fallback_records,
-        vectors,
-        raster,
-        layer,
     )
 
     for item in fallback_records:

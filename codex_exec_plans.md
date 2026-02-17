@@ -52,6 +52,7 @@ Out of scope for initial delivery:
 - [x] (2026-02-16 22:53Z) Finalized packaging flow with `maturin` build artifacts and wheel-install smoke checks.
 - [x] (2026-02-16 23:51Z) Converted staged TIFF fixtures to Git LFS pointers and added `.gitattributes` tracking for `*.tif`.
 - [x] (2026-02-16 23:51Z) Audited staged fixture artifact sizes for GitHub limits; no staged blob exceeds 90 MB.
+- [x] (2026-02-17 01:52Z) Removed non-overlap `nodata` normalization shim to restore strict upstream parity for boundless non-overlapping zones; updated regression/docs and revalidated parity suites.
 
 ## Surprises & Discoveries
 
@@ -115,6 +116,10 @@ Out of scope for initial delivery:
   Rationale: Prevents known upstream nodata overcount behavior without changing upstream test expectations for overlapping all-nodata zones.
   Date/Author: 2026-02-16 / Codex.
 
+- Decision: Revert non-overlap `nodata` post-processing and preserve upstream semantics for strict parity.
+  Rationale: Acceptance review follow-up requested parity with upstream Python behavior for non-overlapping zones; Rust core already matched upstream and the remaining drift came from Python normalization.
+  Date/Author: 2026-02-17 / Codex.
+
 - Decision: Use centroid fallback from `subcatchments.geojson` when parquet reader dependencies are absent.
   Rationale: Keeps fixture generation idempotent and runnable under the command-script bootstrap environment.
   Date/Author: 2026-02-16 / Codex.
@@ -145,6 +150,7 @@ Execution outcome (2026-02-16):
 4. Packaging flow is operational with `maturin develop` and `maturin build`; wheel install smoke tests pass in a fresh virtual environment.
 5. Performance targets are met on both fixture tiers for zonal and point-query workloads after zonal mask-path optimization.
 6. Fixture storage now uses Git LFS for TIFF assets (`21` tracked TIFF files), and staged artifacts pass file-size checks for GitHub limits.
+7. Non-overlap `nodata` footprint behavior now matches upstream Python semantics for both Rust-dispatch and fallback code paths.
 
 Concrete-step status:
 
