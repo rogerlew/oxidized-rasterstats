@@ -4,6 +4,7 @@
 **Reviewer:** Claude Opus 4.6 (automated acceptance review)
 **Upstream pinned SHA:** `e51b48a62e3ac7e4ef4a81a8c2a8e5b90fa5e8ac` (matches current `python-rasterstats` HEAD on `master`)
 **Update:** 2026-02-17 parity update applied for Section 5 (non-overlap `nodata` footprint)
+**Update:** 2026-02-17 hardening update applied (dispatch observability, PyO3 deprecations, dead-code cleanup, benchmark rounds, geopandas path coverage)
 
 ---
 
@@ -22,25 +23,27 @@ All 114 upstream parity tests pass (both Rust-dispatched and Python-fallback mod
 ### 2.1 Upstream Parity Tests (Rust dispatch enabled)
 
 ```
-tests/upstream + tests/compat: 114 passed, 2 skipped
+tests/upstream + tests/compat: 118 passed
 ```
 
 | Suite | Tests | Result |
 |-------|-------|--------|
-| test_zonal.py | 41 | 40 passed, 1 skipped (geopandas) |
-| test_io.py | 31 | 30 passed, 1 skipped (geopandas) |
+| test_zonal.py | 41 | 41 passed |
+| test_io.py | 31 | 31 passed |
 | test_point.py | 10 | 10 passed |
 | test_cli.py | 8 | 8 passed |
 | test_utils.py | 6 | 6 passed |
 | test_api_surface.py | 7 | 7 passed |
 | test_fixture_manifests.py | 2 | 2 passed |
+| test_dispatch_fallback_observability.py | 2 | 2 passed |
 
-The 2 skips are due to `geopandas` not being installed in the test environment (optional dependency). This matches upstream behavior identically.
+`geopandas>=0.13` was installed in the validation environment, so upstream
+GeoDataFrame input paths ran without skips.
 
 ### 2.2 Upstream Parity Tests (Python fallback: `OXRS_DISABLE_RUST=1`)
 
 ```
-tests/upstream + tests/compat: 114 passed, 2 skipped
+tests/upstream + tests/compat: 118 passed
 ```
 
 Identical results to Rust dispatch mode, confirming the fallback path is fully functional.
@@ -298,8 +301,8 @@ The Python layer is well-organized with clear separation between dispatch logic,
 
 | Criterion | Status |
 |-----------|--------|
-| All upstream parity tests pass (Rust dispatch) | PASS (114/114 + 2 skipped) |
-| All upstream parity tests pass (Python fallback) | PASS (114/114 + 2 skipped) |
+| All upstream parity tests pass (Rust dispatch) | PASS (118/118) |
+| All upstream parity tests pass (Python fallback) | PASS (118/118) |
 | All regression tests pass | PASS (11/11) |
 | Rust unit tests pass | PASS (2/2) |
 | API exports match upstream | PASS |
@@ -317,6 +320,5 @@ The Python layer is well-organized with clear separation between dispatch logic,
 
 ## 11. Recommendations
 
-1. **Address compiler warnings** before release: update deprecated PyO3 APIs and remove or `#[allow(dead_code)]` unused utility functions.
-2. **Add `geopandas` to optional test dependencies** to cover the 2 skipped tests in CI.
-3. **Consider adding `--benchmark-min-rounds`** to benchmark configuration for more statistically robust timing (current single-iteration results show 0 stddev).
+1. **CI/Wheel follow-through**: add wheel build/publish matrix (manylinux, macOS, Windows) and smoke-install checks for release artifacts.
+2. **Dispatch health metrics**: optionally add counters/telemetry for Rust-success vs fallback-rate in long-running production processes.

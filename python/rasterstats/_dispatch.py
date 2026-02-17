@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import tempfile
 from os import PathLike
@@ -17,6 +18,8 @@ try:
     from rasterstats import _rs as _rs_mod
 except Exception:  # pragma: no cover - extension may be unavailable in pure-python runs
     _rs_mod = None
+
+_LOG = logging.getLogger(__name__)
 
 
 _SUPPORTED_STATS = {
@@ -61,6 +64,16 @@ def _sanitize_inf(record: dict[str, Any]) -> dict[str, Any]:
         else:
             cleaned[key] = value
     return cleaned
+
+
+def _warn_fallback(api: str, stage: str, err: Exception) -> None:
+    _LOG.warning(
+        "Rust dispatch fallback for %s at %s: %s",
+        api,
+        stage,
+        err,
+        exc_info=err,
+    )
 
 
 def dispatch_zonal_stats(
@@ -126,14 +139,16 @@ def dispatch_zonal_stats(
                     tmp_path = tmp.name
                     json.dump(payload, tmp)
                 temp_vector_path = tmp_path
-            except Exception:
+            except Exception as exc:
                 if tmp_path:
                     try:
                         os.unlink(tmp_path)
                     except OSError:
                         pass
+                _warn_fallback("zonal_stats", "feature_serialization", exc)
                 return None
-        except Exception:
+        except Exception as exc:
+            _warn_fallback("zonal_stats", "feature_normalization", exc)
             return None
         vector_path = temp_vector_path
         vector_layer = 0
@@ -149,7 +164,8 @@ def dispatch_zonal_stats(
             boundless=boundless,
             stats=list(norm_stats),
         )
-    except Exception:
+    except Exception as exc:
+        _warn_fallback("zonal_stats", "rust_call", exc)
         return None
     finally:
         if temp_vector_path:
@@ -219,7 +235,8 @@ def dispatch_point_query(
             interpolate=interpolate,
             boundless=boundless,
         )
-    except Exception:
+    except Exception as exc:
+        _warn_fallback("point_query", "rust_call", exc)
         return None
 
     out: list[Any] = []

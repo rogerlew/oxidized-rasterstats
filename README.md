@@ -9,6 +9,7 @@ Rust-accelerated, GDAL-backed implementation of `rasterstats` with drop-in Pytho
 - Rust fast paths: zonal stats + point query
 - Python fallback: upstream-compatible behavior preserved
 - Non-overlap `nodata` semantics: matches upstream `python-rasterstats` boundless footprint behavior
+- Rust dispatch exceptions are logged before fallback so backend failures are visible in operations logs
 
 ## Quick Start
 
@@ -16,7 +17,8 @@ Rust-accelerated, GDAL-backed implementation of `rasterstats` with drop-in Pytho
 python -m venv .venv
 . .venv/bin/activate
 pip install -U pip
-pip install maturin pytest pytest-cov pytest-benchmark
+pip install -e ".[test,perf]"
+pip install maturin
 
 python scripts/sync_upstream.py \
   --repo /workdir/python-rasterstats \
@@ -60,8 +62,8 @@ PYTHONPATH=python pytest tests/regression -q
 PYTHONPATH=python OXRS_DISABLE_RUST=1 pytest tests/upstream tests/compat -q
 
 # Performance suites
-PYTHONPATH=python pytest tests/perf -q -m perf_small --benchmark-only
-PYTHONPATH=python pytest tests/perf -q -m perf_large --benchmark-only
+PYTHONPATH=python pytest tests/perf -q -m perf_small --benchmark-only --benchmark-min-rounds=5
+PYTHONPATH=python pytest tests/perf -q -m perf_large --benchmark-only --benchmark-min-rounds=5
 ```
 
 ## Benchmark Snapshot (2026-02-16)

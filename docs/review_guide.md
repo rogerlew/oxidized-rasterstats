@@ -34,8 +34,10 @@ This document summarizes what changed and how to review the codebase efficiently
 3. Invalid file-like strings are routed to Python fallback (avoids Rust path open errors for WKT/invalid inputs).
 4. In-memory feature collections are normalized through temporary GeoJSON when Rust dispatch is enabled to preserve cross-input consistency.
 5. Non-overlapping-zone `nodata` footprint counts now match upstream behavior; no post-processing normalization to `0` is applied.
-6. Upstream attribution for Matthew Perry and `python-rasterstats` is documented in `docs/attribution.md`.
-7. Project-level copyright and artifact ownership notes are documented in `NOTICE.md`.
+6. Rust dispatch exceptions are logged at warning level before fallback, so fast-path failures are observable.
+7. PyO3 deprecation warnings were removed by upgrading to `pyo3=0.22` and updating module/dict APIs.
+8. Upstream attribution for Matthew Perry and `python-rasterstats` is documented in `docs/attribution.md`.
+9. Project-level copyright and artifact ownership notes are documented in `NOTICE.md`.
 
 ## Reproduction Commands
 
@@ -43,7 +45,8 @@ This document summarizes what changed and how to review the codebase efficiently
 python -m venv .venv
 . .venv/bin/activate
 pip install -U pip
-pip install maturin pytest pytest-cov pytest-benchmark patchelf
+pip install -e ".[test,perf]"
+pip install maturin patchelf
 
 python scripts/sync_upstream.py --repo /workdir/python-rasterstats --sha e51b48a62e3ac7e4ef4a81a8c2a8e5b90fa5e8ac
 python scripts/build_weppcloud_fixtures.py --small-run /wc1/runs/va/vacant-better --large-run /wc1/runs/co/copacetic-note --out tests/fixtures/weppcloud --profile all
@@ -54,8 +57,8 @@ PYTHONPATH=python pytest tests/upstream tests/compat -q
 PYTHONPATH=python pytest tests/regression -q
 PYTHONPATH=python OXRS_DISABLE_RUST=1 pytest tests/upstream tests/compat -q
 
-PYTHONPATH=python pytest tests/perf -q -m perf_small --benchmark-only --benchmark-json benchmarks/results/2026-02-16-small.json
-PYTHONPATH=python pytest tests/perf -q -m perf_large --benchmark-only --benchmark-json benchmarks/results/2026-02-16-large.json
+PYTHONPATH=python pytest tests/perf -q -m perf_small --benchmark-only --benchmark-min-rounds=5 --benchmark-json benchmarks/results/2026-02-16-small.json
+PYTHONPATH=python pytest tests/perf -q -m perf_large --benchmark-only --benchmark-min-rounds=5 --benchmark-json benchmarks/results/2026-02-16-large.json
 ```
 
 ## Latest Verified Results

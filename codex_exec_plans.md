@@ -53,6 +53,7 @@ Out of scope for initial delivery:
 - [x] (2026-02-16 23:51Z) Converted staged TIFF fixtures to Git LFS pointers and added `.gitattributes` tracking for `*.tif`.
 - [x] (2026-02-16 23:51Z) Audited staged fixture artifact sizes for GitHub limits; no staged blob exceeds 90 MB.
 - [x] (2026-02-17 01:52Z) Removed non-overlap `nodata` normalization shim to restore strict upstream parity for boundless non-overlapping zones; updated regression/docs and revalidated parity suites.
+- [x] (2026-02-17 02:23Z) Hardened dispatch observability (warning logs on Rust-path exceptions), upgraded PyO3 APIs/version to remove deprecations, removed dead Rust helpers, and upgraded perf/geopandas validation coverage.
 
 ## Surprises & Discoveries
 
@@ -120,6 +121,10 @@ Out of scope for initial delivery:
   Rationale: Acceptance review follow-up requested parity with upstream Python behavior for non-overlapping zones; Rust core already matched upstream and the remaining drift came from Python normalization.
   Date/Author: 2026-02-17 / Codex.
 
+- Decision: Log warning-level events for exception-triggered Rust dispatch fallback instead of silently returning `None`.
+  Rationale: Preserve fallback safety while making fast-path failures observable in production operations.
+  Date/Author: 2026-02-17 / Codex.
+
 - Decision: Use centroid fallback from `subcatchments.geojson` when parquet reader dependencies are absent.
   Rationale: Keeps fixture generation idempotent and runnable under the command-script bootstrap environment.
   Date/Author: 2026-02-16 / Codex.
@@ -151,6 +156,7 @@ Execution outcome (2026-02-16):
 5. Performance targets are met on both fixture tiers for zonal and point-query workloads after zonal mask-path optimization.
 6. Fixture storage now uses Git LFS for TIFF assets (`21` tracked TIFF files), and staged artifacts pass file-size checks for GitHub limits.
 7. Non-overlap `nodata` footprint behavior now matches upstream Python semantics for both Rust-dispatch and fallback code paths.
+8. Dispatch fallback health is now observable through warning logs, Rust compile warnings from PyO3/dead-code are cleared, and benchmark/geopandas test posture is hardened (multi-round perf, no geopandas skips in validated environment).
 
 Concrete-step status:
 

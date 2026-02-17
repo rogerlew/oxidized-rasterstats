@@ -28,7 +28,7 @@ test = [
   "pytest>=7.0",
   "pytest-cov",
   "pytest-benchmark",
-  "geopandas",
+  "geopandas>=0.13",
   "pyshp>=1.1.4",
 ]
 perf = ["pytest-benchmark"]

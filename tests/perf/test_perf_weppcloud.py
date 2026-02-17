@@ -8,22 +8,30 @@ from pathlib import Path
 import pytest
 
 from rasterstats import point_query, zonal_stats
+from rasterstats._dispatch import _rust_available_default_on
 from rasterstats._fallback_py import fallback_point_query, fallback_zonal_stats
 
 FIXTURE_ROOT = Path(__file__).resolve().parents[1] / "fixtures" / "weppcloud"
+BENCHMARK_ROUNDS = max(5, int(os.environ.get("OXRS_BENCHMARK_ROUNDS", "5")))
+BENCHMARK_ITERATIONS = max(1, int(os.environ.get("OXRS_BENCHMARK_ITERATIONS", "1")))
 
 
 @contextmanager
-def env_var(name: str, value: str):
-    old = os.environ.get(name)
-    os.environ[name] = value
+def unset_var(name: str):
+    old = os.environ.pop(name, None)
     try:
         yield
     finally:
-        if old is None:
-            os.environ.pop(name, None)
-        else:
+        if old is not None:
             os.environ[name] = old
+
+
+def _run_benchmark(benchmark, fn):
+    return benchmark.pedantic(
+        fn,
+        rounds=BENCHMARK_ROUNDS,
+        iterations=BENCHMARK_ITERATIONS,
+    )
 
 
 def _paths(tier: str) -> tuple[Path, Path, Path]:
@@ -51,10 +59,11 @@ def test_perf_small_zonal_rust(benchmark):
     vectors, raster, _ = _paths("small")
 
     def run():
-        with env_var("OXRS_ENABLE_RUST", "1"):
+        with unset_var("OXRS_DISABLE_RUST"):
+            assert _rust_available_default_on()
             return zonal_stats(vectors, raster, stats="count mean")
 
-    out = benchmark.pedantic(run, rounds=1, iterations=1)
+    out = _run_benchmark(benchmark, run)
     assert out[0]["count"] >= 0
 
 
@@ -68,7 +77,7 @@ def test_perf_small_zonal_upstream(benchmark):
     def run():
         return fallback_zonal_stats(feature_collection, raster, stats="count mean")
 
-    out = benchmark.pedantic(run, rounds=1, iterations=1)
+    out = _run_benchmark(benchmark, run)
     assert out[0]["count"] >= 0
 
 
@@ -79,10 +88,11 @@ def test_perf_small_point_rust(benchmark):
     _, raster, points = _paths("small")
 
     def run():
-        with env_var("OXRS_ENABLE_RUST", "1"):
+        with unset_var("OXRS_DISABLE_RUST"):
+            assert _rust_available_default_on()
             return point_query(points, raster, interpolate="bilinear")
 
-    out = benchmark.pedantic(run, rounds=1, iterations=1)
+    out = _run_benchmark(benchmark, run)
     assert len(out) > 0
 
 
@@ -95,7 +105,7 @@ def test_perf_small_point_upstream(benchmark):
     def run():
         return fallback_point_query(points, raster, interpolate="bilinear")
 
-    out = benchmark.pedantic(run, rounds=1, iterations=1)
+    out = _run_benchmark(benchmark, run)
     assert len(out) > 0
 
 
@@ -106,10 +116,11 @@ def test_perf_large_zonal_rust(benchmark):
     vectors, raster, _ = _paths("large_local")
 
     def run():
-        with env_var("OXRS_ENABLE_RUST", "1"):
+        with unset_var("OXRS_DISABLE_RUST"):
+            assert _rust_available_default_on()
             return zonal_stats(vectors, raster, stats="count mean")
 
-    out = benchmark.pedantic(run, rounds=1, iterations=1)
+    out = _run_benchmark(benchmark, run)
     assert out[0]["count"] >= 0
 
 
@@ -123,7 +134,7 @@ def test_perf_large_zonal_upstream(benchmark):
     def run():
         return fallback_zonal_stats(feature_collection, raster, stats="count mean")
 
-    out = benchmark.pedantic(run, rounds=1, iterations=1)
+    out = _run_benchmark(benchmark, run)
     assert out[0]["count"] >= 0
 
 
@@ -134,10 +145,11 @@ def test_perf_large_point_rust(benchmark):
     _, raster, points = _paths("large_local")
 
     def run():
-        with env_var("OXRS_ENABLE_RUST", "1"):
+        with unset_var("OXRS_DISABLE_RUST"):
+            assert _rust_available_default_on()
             return point_query(points, raster, interpolate="bilinear")
 
-    out = benchmark.pedantic(run, rounds=1, iterations=1)
+    out = _run_benchmark(benchmark, run)
     assert len(out) > 0
 
 
@@ -150,5 +162,5 @@ def test_perf_large_point_upstream(benchmark):
     def run():
         return fallback_point_query(points, raster, interpolate="bilinear")
 
-    out = benchmark.pedantic(run, rounds=1, iterations=1)
+    out = _run_benchmark(benchmark, run)
     assert len(out) > 0

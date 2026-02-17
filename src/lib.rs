@@ -58,7 +58,7 @@ fn zonal_stats_path(
 
     let mut out = Vec::with_capacity(records.len());
     for record in records {
-        let result = PyDict::new(py);
+        let result = PyDict::new_bound(py);
         for (k, v) in record.ints {
             result.set_item(k, v)?;
         }
@@ -96,7 +96,7 @@ fn point_query_path(
 }
 
 #[pymodule]
-fn _rs(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn _rs(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(healthcheck, m)?)?;
     m.add_function(wrap_pyfunction!(zonal_stats_path, m)?)?;
     m.add_function(wrap_pyfunction!(point_query_path, m)?)?;

@@ -51,30 +51,11 @@ impl RasterContext {
         })
     }
 
-    pub fn dimensions(&self) -> (usize, usize) {
-        (self.width, self.height)
-    }
-
-    pub fn geo_transform(&self) -> [f64; 6] {
-        self.geotransform
-    }
-
     pub fn world_to_pixel(&self, x: f64, y: f64) -> (f64, f64) {
         let gt = self.inverse_geotransform;
         let col = gt[0] + gt[1] * x + gt[2] * y;
         let row = gt[3] + gt[4] * x + gt[5] * y;
         (col, row)
-    }
-
-    pub fn pixel_to_world(&self, col: f64, row: f64) -> (f64, f64) {
-        let gt = self.geotransform;
-        let x = gt[0] + gt[1] * col + gt[2] * row;
-        let y = gt[3] + gt[4] * col + gt[5] * row;
-        (x, y)
-    }
-
-    pub fn pixel_center_world(&self, row: isize, col: isize) -> (f64, f64) {
-        self.pixel_to_world((col as f64) + 0.5, (row as f64) + 0.5)
     }
 
     pub fn is_inside(&self, row: isize, col: isize) -> bool {
@@ -110,39 +91,6 @@ impl RasterContext {
                     Some(v)
                 }
             }
-        })
-    }
-
-    pub fn read_raw_value(&self, row: isize, col: isize) -> OxrsResult<Option<f64>> {
-        if !self.is_inside(row, col) {
-            return Ok(None);
-        }
-        let raster_band = self.dataset.rasterband(self.band_index)?;
-        let buffer: Buffer<f64> = raster_band.read_as((col, row), (1, 1), (1, 1), None)?;
-        Ok(buffer.data().first().copied())
-    }
-
-    pub fn cell_corners_world(&self, row: isize, col: isize) -> [(f64, f64); 4] {
-        let p1 = self.pixel_to_world(col as f64, row as f64);
-        let p2 = self.pixel_to_world((col + 1) as f64, row as f64);
-        let p3 = self.pixel_to_world((col + 1) as f64, (row + 1) as f64);
-        let p4 = self.pixel_to_world(col as f64, (row + 1) as f64);
-        [p1, p2, p3, p4]
-    }
-
-    pub fn window_for_bounds(
-        &self,
-        min_x: f64,
-        min_y: f64,
-        max_x: f64,
-        max_y: f64,
-    ) -> Window {
-        let unclipped = self.window_for_bounds_unclipped(min_x, min_y, max_x, max_y);
-        self.clip_window(unclipped).unwrap_or(Window {
-            row_start: 1,
-            row_end: 0,
-            col_start: 1,
-            col_end: 0,
         })
     }
 
@@ -201,23 +149,6 @@ impl RasterContext {
             gt[4],
             gt[5],
         ]
-    }
-
-    pub fn read_window_f64(&self, window: Window) -> OxrsResult<(usize, usize, Vec<f64>)> {
-        if window.row_end < window.row_start || window.col_end < window.col_start {
-            return Ok((0, 0, Vec::new()));
-        }
-        let width = (window.col_end - window.col_start + 1) as usize;
-        let height = (window.row_end - window.row_start + 1) as usize;
-        let raster_band = self.dataset.rasterband(self.band_index)?;
-        let buffer: Buffer<f64> = raster_band.read_as(
-            (window.col_start, window.row_start),
-            (width, height),
-            (width, height),
-            None,
-        )?;
-        let ((cols, rows), data) = buffer.into_shape_and_vec();
-        Ok((cols, rows, data))
     }
 
     pub fn read_window_f64_boundless(
